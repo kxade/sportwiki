@@ -6,8 +6,9 @@ from . import converters
 register_converter(converters.FourDigitYearConverter, "year4")
 
 urlpatterns = [
-    path('', views.index),  # http://127.0.0.1:8000/athletes
-    path('cats/<int:cat_id>/', views.categories),  # http://127.0.0.1:8000/cats
-    path('cats/<slug:cat_slug>/', views.categories_by_slug),
-    path('archive/<year4:year>', views.archive),
+    path('', views.index, name="home"),  # http://127.0.0.1:8000/athletes
+    path('about/', views.about, name="about"),
+    path('cats/<int:cat_id>/', views.categories, name="cats_id"),  # http://127.0.0.1:8000/cats
+    path('cats/<slug:cat_slug>/', views.categories_by_slug, name="cats"),
+    path('archive/<year4:year>', views.archive, name="archive"),
 ]
