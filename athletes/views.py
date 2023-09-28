@@ -2,12 +2,16 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+menu = ["О сайте", "Добавить статью",  "Обратная связь", "Войти"]
+
 
 def index(request):  #HttpRequest
-    return HttpResponse("Страница приложения Athletes.")
+    data = {'title': 'Главная страница',
+            'menu': menu}
+    return render(request, 'athletes/index.html', context=data)
 
 def about(request):
-    return render(request, "athletes/about.html")
+    return render(request, "athletes/about.html", {'title': 'О сайте'})
 
 def categories(request, cat_id):  #HttpRequest
     return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}</p>")
