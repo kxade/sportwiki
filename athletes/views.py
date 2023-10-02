@@ -34,7 +34,7 @@ def login(request):
     return HttpResponse(f"Авторизация")
 
 def about(request):
-    return render(request, "athletes/about.html", {'title': 'О сайте'})
+    return render(request, "athletes/about.html", {'title': 'О сайте', 'menu': menu})
 
 def show_post(request, post_id):
     return HttpResponse(f"Отображение статьи с id = {post_id}")
