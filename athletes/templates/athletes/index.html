@@ -5,7 +5,32 @@
     <title>{{ title }}</title>
 </head>
 <body>
-<p>{{ menu }}</p>
+    <ul>
+    <li><a href="{% url 'home' %}">Главная страница</a></li>
+    {% for menu_item in menu %}
+    {% if not forloop.last %}
+    <li>
+    {% else %}
+    <li class="last">
+    {% endif %}
+    <a href="{% url menu_item.url_name %}">{{ menu_item.title }}</a></li>
+    {% endfor %}
+    </ul>
 <h1>{{ title }}</h1>
+
+<ul>
+    {% for post_item in posts %}
+    {% if post_item.is_published %}
+    <li>
+        <h2>{{ post_item.title }}</h2>
+        <p>{{ post_item.content }}</p>
+        <p><a href="{% url 'post' post_item.id %}">Читать пост</a></p>
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
 </body>
 </html>
