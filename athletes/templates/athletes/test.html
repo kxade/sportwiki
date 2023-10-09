@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header class="header">
+        <div class="container">
+            <nav class="nav">
+                <ul class="menu">
+                    <li class="menu-item"><a href="{% url 'home' %}">Главная страница</a></li>
+                    {% for menu_item in menu %}
+                    {% if not forloop.last %}
+                    <li>
+                    {% else %}
+                    <li class="menu-item last">
+                    {% endif %}
+                    <a href="{% url menu_item.url_name %}">{{ menu_item.title }}</a></li>
+                    {% endfor %}
+                </ul>
+                <a class="logo">
+                    <img class="logo-img" src="#" alt="Логотип сайта">
+                </a>
+            </nav>
+        </div>
+    </header>
+</body>
+</html>

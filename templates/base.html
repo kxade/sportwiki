@@ -1,21 +1,38 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link type="text/css" href="{% static 'athletes/css/normalize.css' %}" rel="stylesheet"/>
+    <link type="text/css" href="{% static 'athletes/css/styles.css' %}" rel="stylesheet"/>
 </head>
 <body>
-    <ul>
-        <li><a href="{% url 'home' %}">Главная страница</a></li>
-        {% for menu_item in menu %}
-        {% if not forloop.last %}
-        <li>
-        {% else %}
-        <li class="last">
-        {% endif %}
-        <a href="{% url menu_item.url_name %}">{{ menu_item.title }}</a></li>
-        {% endfor %}
-    </ul>
+<header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a class="logo" href="{% url 'home' %}">
+                    <img class="logo-img" src="{% static 'athletes/images/logo.png' %}" width="10%" alt="Логотип сайта">
+                </a>
+                <ul class="menu">
+                    {% for menu_item in menu %}
+                    {% if not forloop.last %}
+                    <li class="menu-item">
+                    {% else %}
+                    <li class="menu-item last">
+                    {% endif %}
+                    <a href="{% url menu_item.url_name %}">{{ menu_item.title }}</a></li>
+                    {% endfor %}
+                 </ul>
+            </nav>
+        </div>
+    </header>
 {% block content %} {% endblock %}
+<footer class="footer">
+    <div class="container">
+        <p>Это блог о спортсменах. Построен на Django 4.2</p>
+    </div>
+</footer>
 </body>
 </html>

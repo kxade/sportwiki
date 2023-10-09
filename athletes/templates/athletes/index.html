@@ -1,23 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ title }}</h1>
-
-{% include 'athletes/includes/nav.html' %}
-
-<ul>
-    {% for post_item in posts %}
-    {% if post_item.is_published %}
-    <li>
-        <h2>{{ post_item.title }}</h2>
-        <p>{{ post_item.content }}</p>
-        <p><a href="{% url 'post' post_item.id %}">Читать пост</a></p>
-        {% if not forloop.last %}
-        <hr>
-        {% endif %}
-    </li>
-    {% endif %}
-    {% endfor %}
-</ul>
-
-{% include 'athletes/includes/nav.html' %}
+<main class="main">
+    <div class="container">
+        <section class="categories">
+            <ul>
+                <li><a href="#">Борцы</a></li>
+                <li><a href="#">Дзюдоисты</a></li>
+                <li><a href="#">Бойцы</a></li>
+                <li><a href="#">Шахматисты</a></li>
+            </ul>
+        </section>
+        <section class="posts">
+            <ul>
+                {% for post_item in posts %}
+                {% if post_item.is_published %}
+                <li>
+                    <h2>{{ post_item.title }}</h2>
+                    <p>{{ post_item.content }}</p>
+                    <p><a class="read-post-button" href="{% url 'post' post_item.id %}">Читать пост</a></p>
+                    {% if not forloop.last %}
+                    <hr>
+                    {% endif %}
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</main>
 {% endblock %}
