@@ -28,6 +28,7 @@ def index(request):  #HttpRequest
         'title': 'Главная страница',
         'menu': menu,
         'posts': db,
+        'cat_selected': 0,
     }
     return render(request, 'athletes/index.html', context=data)
 
@@ -47,7 +48,13 @@ def show_post(request, post_id):
     return HttpResponse(f"Отображение статьи с id = {post_id}")
 
 def show_category(request, cat_id):
-    return index(request)
+    data = {
+        'title': 'Главная страница',
+        'menu': menu,
+        'posts': db,
+        'cat_selected': cat_id,
+    }
+    return render(request, 'athletes/index.html', context=data)
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
