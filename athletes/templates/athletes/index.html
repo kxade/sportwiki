@@ -1,15 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<main class="main">
-    <div class="container">
-        <section class="categories">
-            <ul>
-                <li><a href="#">Борцы</a></li>
-                <li><a href="#">Дзюдоисты</a></li>
-                <li><a href="#">Бойцы</a></li>
-                <li><a href="#">Шахматисты</a></li>
-            </ul>
-        </section>
         <section class="posts">
             <ul>
                 {% for post_item in posts %}
@@ -26,6 +16,4 @@
                 {% endfor %}
             </ul>
         </section>
-    </div>
-</main>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% load athlete_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +10,7 @@
     <link type="text/css" href="{% static 'athletes/css/styles.css' %}" rel="stylesheet"/>
 </head>
 <body>
-<header class="header">
+    <header class="header">
         <div class="container">
             <nav class="nav">
                 <a class="logo" href="{% url 'home' %}">
@@ -28,11 +29,24 @@
             </nav>
         </div>
     </header>
-{% block content %} {% endblock %}
-<footer class="footer">
-    <div class="container">
-        <p>Это блог о спортсменах. Построен на Django 4.2</p>
-    </div>
-</footer>
+    <main class="main">
+        <div class="container">
+            <section class="categories">
+                <ul>
+                    {% getcats as categories %}
+                    <li class="selected">Все категории</li>
+                    {% for cat in categories %}
+                    <li><a href="{% url 'category' cat.id %}">{{cat.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% block content %} {% endblock %}
+            </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>Это блог о спортсменах. Построен на Django 4.2</p>
+        </div>
+    </footer>
 </body>
 </html>

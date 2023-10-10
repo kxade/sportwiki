@@ -15,6 +15,13 @@ db = [
     {"id": 3, "title": "Ахмед Тажутдинов", 'content': "Биография Ахмеда Тажутдинова", "is_published": True},
 ]
 
+cats_db = [
+    {"id": 1, "name": "Борцы"},
+    {"id": 2, "name": "Дзюдоисты"},
+    {"id": 3, "name": "Бойцы"},
+    {"id": 4, "name": "Шахматисты"},
+]
+
 
 def index(request):  #HttpRequest
     data = {
@@ -38,6 +45,9 @@ def about(request):
 
 def show_post(request, post_id):
     return HttpResponse(f"Отображение статьи с id = {post_id}")
+
+def show_category(request, cat_id):
+    return index(request)
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
