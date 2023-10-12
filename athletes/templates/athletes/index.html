@@ -7,7 +7,7 @@
                 <li>
                     <h2>{{ post_item.title }}</h2>
                     <p>{{ post_item.content }}</p>
-                    <p><a class="read-post-button" href="{% url 'post' post_item.id %}">Читать пост</a></p>
+                    <p><a class="read-post-button" href="{{ post_item.get_absolute_url }}">Читать пост</a></p>
                     {% if not forloop.last %}
                     <hr>
                     {% endif %}

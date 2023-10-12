@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="post">
+    <h1> {{ title}} </h1>
+
+    {% if post.photo %}
+    <p><img class="img-article-left" src="{{ post.photo.url }}"></p>
+    {% endif %}
+
+    {{ post.content|linebreaks }}
+</section>
+{% endblock %}
