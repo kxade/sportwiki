@@ -3,7 +3,6 @@
         <section class="posts">
             <ul>
                 {% for post_item in posts %}
-                {% if post_item.is_published %}
                 <li>
                     <h2>{{ post_item.title }}</h2>
                     <p>{{ post_item.content }}</p>
@@ -12,7 +11,6 @@
                     <hr>
                     {% endif %}
                 </li>
-                {% endif %}
                 {% endfor %}
             </ul>
         </section>

@@ -21,7 +21,7 @@ cats_db = [
 
 
 def index(request):  #HttpRequest
-    posts = Athlete.objects.filter(is_published=1)
+    posts = Athlete.published.all()
 
     data = {
         'title': 'Главная страница',
