@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import Athlete
+from .models import Athlete, Category
 
 menu = [
     {"title": "О сайте", "url_name": "about"},
@@ -10,15 +10,6 @@ menu = [
     {"title": "Обратная связь", "url_name": "contact"},
     {"title": "Войти", "url_name": "login"},
 ]
-
-
-cats_db = [
-    {"id": 1, "name": "Борцы"},
-    {"id": 2, "name": "Дзюдоисты"},
-    {"id": 3, "name": "Бойцы"},
-    {"id": 4, "name": "Шахматисты"},
-]
-
 
 def index(request):  #HttpRequest
     posts = Athlete.published.all()
@@ -55,12 +46,14 @@ def show_post(request, post_slug):
     }
     return render(request, 'athletes/post.html', data)
 
-def show_category(request, cat_id):
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug)
+    posts = Athlete.published.filter(cat_id=category.pk)
     data = {
-        'title': 'Главная страница',
+        'title': f"Категория: {category.name}",
         'menu': menu,
-        'posts': db,
-        'cat_selected': cat_id,
+        'posts': posts,
+        'cat_selected': category.pk,
     }
     return render(request, 'athletes/index.html', context=data)
 

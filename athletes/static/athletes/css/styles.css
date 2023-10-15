@@ -103,3 +103,9 @@ ul {
 .selected:hover {
     color: #8e0922;
 }
+
+.article-panel {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f7f7f7;
+}
