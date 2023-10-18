@@ -31,6 +31,7 @@ class Athlete(models.Model):
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name="posts")
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags')
+    medcard = models.OneToOneField('MedCard', on_delete=models.SET_NULL, null=True, blank=True, related_name="athlete")
 
     objects = models.Manager()
     published = PublishedManager()
@@ -58,3 +59,12 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class MedCard(models.Model):
+    height = models.IntegerField(null=True)
+    weight = models.IntegerField(null=True)
+    birthday = models.DateField(null=True)
+
+    def __str__(self):
+        return f"Рост: {self.height}; вес: {self.weight}; дата рождения: {self.birhday};"
