@@ -67,4 +67,4 @@ class MedCard(models.Model):
     birthday = models.DateField(null=True)
 
     def __str__(self):
-        return f"Рост: {self.height}; вес: {self.weight}; дата рождения: {self.birhday};"
+        return f"Рост: {self.height}; вес: {self.weight}; дата рождения: {self.birthday};"
