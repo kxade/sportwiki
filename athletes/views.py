@@ -12,7 +12,7 @@ menu = [
 ]
 
 def index(request):  #HttpRequest
-    posts = Athlete.published.all()
+    posts = Athlete.published.all().select_related('cat')
 
     data = {
         'title': 'Главная страница',
@@ -48,7 +48,7 @@ def show_post(request, post_slug):
 
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
-    posts = Athlete.published.filter(cat_id=category.pk)
+    posts = Athlete.published.filter(cat_id=category.pk).select_related('cat')
     data = {
         'title': f"Категория: {category.name}",
         'menu': menu,
