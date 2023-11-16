@@ -41,6 +41,8 @@ class Athlete(models.Model):
 
 
     class Meta:
+        verbose_name = "Известные атлеты"
+        verbose_name_plural = "Известные атлеты"
         ordering = ['-time_create']
         indexes = [
             models.Index(fields=['-time_create'])
