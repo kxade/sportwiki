@@ -1,6 +1,23 @@
 from django.contrib import admin, messages
 from .models import Athlete, Category
 
+
+class MedCardFilter(admin.SimpleListFilter):
+    title = 'Наличие медкарты'
+    parameter_name = "status"
+
+    def lookups(self, request, model_admin):
+        return [
+            ('medcard', "Есть медкарта"),
+            ('nomedcard', "Нет медкарты"),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'medcard':
+            return queryset.filter(medcard__isnull=False)
+        if self.value() == 'nomedcard':
+            return queryset.filter(medcard__isnull=True)
+
 @admin.register(Athlete)
 class AthleteAdmin(admin.ModelAdmin):
     list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')
@@ -10,7 +27,7 @@ class AthleteAdmin(admin.ModelAdmin):
     list_per_page = 5
     actions = ('set_published', 'set_draft')
     search_fields = ('title', 'cat__name')
-    list_filter = ('cat__name', 'is_published')
+    list_filter = (MedCardFilter, 'cat__name', 'is_published')
 
     @admin.display(description="Краткое описание", ordering="content")
     def brief_info(self, athlete: Athlete):
