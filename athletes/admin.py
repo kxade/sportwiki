@@ -9,6 +9,7 @@ class AthleteAdmin(admin.ModelAdmin):
     list_editable = ('is_published',)
     list_per_page = 5
     actions = ('set_published', 'set_draft')
+    search_fields = ('title', 'cat__name')
 
     @admin.display(description="Краткое описание", ordering="content")
     def brief_info(self, athlete: Athlete):
