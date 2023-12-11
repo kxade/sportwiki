@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
+from .forms import AddPostForm
 from .models import Athlete, Category, TagPost
 
 menu = [
@@ -23,7 +24,19 @@ def index(request):  #HttpRequest
     return render(request, 'athletes/index.html', context=data)
 
 def addpage(request):
-    return HttpResponse("Добавление статьи")
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = AddPostForm()
+
+    data = {'menu': menu,
+            'title': 'Добавление статьи',
+            'form': form
+
+    }
+    return render(request, 'athletes/addpage.html', context=data)
 
 def contact(request):
     return HttpResponse(f"Обратная связь")

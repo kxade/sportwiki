@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="addpage">
+    <h1>{{title}}</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+<!--        <p><label for="id_1">Текст</label><input type="text" name="filled_text"></p>-->
+<!--        <p><label for="id_2">Отметка</label><input type="checkbox" name="filled_check"></p>-->
+<!--        <p><label for="id_3">Число</label><input type="number" name="filled_number"></p>-->
+<!--        <p><label for="id_4">Пароль</label><input type="password" name="filled_psw"></p>-->
+            <button type="submit">Отправить</button>
+
+    </form>
+</section>
+
+{% endblock content %}
