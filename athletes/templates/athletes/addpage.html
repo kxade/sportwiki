@@ -5,13 +5,16 @@
     <h1>{{title}}</h1>
     <form action="" method="POST">
         {% csrf_token %}
-
-        {{ form.as_p }}
+        <div class="form_error">{{ form.non_field_errors }}</div>
+        {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_lable}}">{{ f.label }}: {{ f }}</label></p>
+        <div class="form_error">{{ f.errors }}</div>
+        {% endfor %}
 <!--        <p><label for="id_1">Текст</label><input type="text" name="filled_text"></p>-->
 <!--        <p><label for="id_2">Отметка</label><input type="checkbox" name="filled_check"></p>-->
 <!--        <p><label for="id_3">Число</label><input type="number" name="filled_number"></p>-->
 <!--        <p><label for="id_4">Пароль</label><input type="password" name="filled_psw"></p>-->
-            <button type="submit">Отправить</button>
+        <button type="submit">Отправить</button>
 
     </form>
 </section>
