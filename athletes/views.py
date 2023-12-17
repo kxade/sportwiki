@@ -2,8 +2,9 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .forms import AddPostForm
+from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost
+from uuid import uuid4
 
 menu = [
     {"title": "О сайте", "url_name": "about"},
@@ -50,8 +51,25 @@ def contact(request):
 def login(request):
     return HttpResponse(f"Авторизация")
 
+
+def handle_uploaded_file(f):
+    with open(f"uploads/{f.name}{uuid4}", "wb+") as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
+
 def about(request):
-    return render(request, "athletes/about.html", {'title': 'О сайте', 'menu': menu})
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(form.cleaned_data['file'])
+    else:
+        form = UploadFileForm()
+
+
+    return render(request, "athletes/about.html", {'title': 'О сайте', 'menu': menu,
+                                                   'form': form})
 
 def show_post(request, post_slug):
 
