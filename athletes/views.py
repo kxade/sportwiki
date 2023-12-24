@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.views import View
 
 from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
@@ -44,6 +45,29 @@ def addpage(request):
 
     }
     return render(request, 'athletes/addpage.html', context=data)
+
+
+class AddPage(View):
+    def get(self, request):
+        form = AddPostForm()
+        data = {'menu': menu,
+                'title': 'Добавление статьи',
+                'form': form
+                }
+        return render(request, 'athletes/addpage.html', context=data)
+
+    def post(self, request):
+        form = AddPostForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+        data = {'menu': menu,
+                'title': 'Добавление статьи',
+                'form': form
+        }
+        return render(request, 'athletes/addpage.html', context=data)
+
 
 def contact(request):
     return HttpResponse(f"Обратная связь")
