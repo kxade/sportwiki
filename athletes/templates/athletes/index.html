@@ -8,6 +8,9 @@
                         <p class="first">Категория: {{ post_item.cat }}</p>
                         <p class="last"> Дата изменения: {{ post_item.time_update|date:"d-m-y H:i:s" }}</p>
                     </div>
+                    {% if post_item.photo %}
+                    <p><img src="{{ post_item.photo.url }}" class="img-article-left thumb" alt=""></p>
+                    {% endif %}
                     <h2>{{ post_item.title }}</h2>
                     <p>{{ post_item.content }}</p>
                     <p><a class="read-post-button" href="{{ post_item.get_absolute_url }}">Читать пост</a></p>
