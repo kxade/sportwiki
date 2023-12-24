@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from .forms import AddPostForm, UploadFileForm
-from .models import Athlete, Category, TagPost
+from .models import Athlete, Category, TagPost, UploadFiles
 from uuid import uuid4
 
 menu = [
@@ -26,7 +26,7 @@ def index(request):  #HttpRequest
 
 def addpage(request):
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
             # try:
             #     Athlete.objects.create(**form.cleaned_data)
@@ -52,10 +52,11 @@ def login(request):
     return HttpResponse(f"Авторизация")
 
 
-def handle_uploaded_file(f):
-    with open(f"uploads/{f.name}{uuid4}", "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+# функция для загрузки файлов без привязки к модели
+# def handle_uploaded_file(f):
+#     with open(f"uploads/{f.name}{uuid4}", "wb+") as destination:
+#         for chunk in f.chunks():
+#             destination.write(chunk)
 
 
 
@@ -63,7 +64,9 @@ def about(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(form.cleaned_data['file'])
+            #handle_uploaded_file(form.cleaned_data['file'])
+            fp = UploadFiles(file=form.cleaned_data['file'])
+            fp.save()
     else:
         form = UploadFileForm()
 
