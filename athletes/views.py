@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
+from django.views.generic import TemplateView
 
 from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
@@ -24,6 +25,16 @@ def index(request):  #HttpRequest
         'cat_selected': 0,
     }
     return render(request, 'athletes/index.html', context=data)
+
+
+class AthleteHome(TemplateView):
+    template_name = 'athletes/index.html'
+    extra_context = data = {
+        'title': 'Главная страница',
+        'menu': menu,
+        'posts': Athlete.published.all().select_related('cat'),
+        'cat_selected': 0,
+    }
 
 def addpage(request):
     if request.method == 'POST':
