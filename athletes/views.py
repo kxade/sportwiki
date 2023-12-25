@@ -29,12 +29,21 @@ def index(request):  #HttpRequest
 
 class AthleteHome(TemplateView):
     template_name = 'athletes/index.html'
-    extra_context = data = {
-        'title': 'Главная страница',
-        'menu': menu,
-        'posts': Athlete.published.all().select_related('cat'),
-        'cat_selected': 0,
-    }
+    # extra_context = data = {
+    #     'title': 'Главная страница',
+    #     'menu': menu,
+    #     'posts': Athlete.published.all().select_related('cat'),
+    #     'cat_selected': 0,
+    # }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Главная страница"
+        context['menu'] = menu
+        context['posts'] = Athlete.published.all().select_related('cat')
+        context['cat_selected'] = int(self.request.GET.get('cat_id', 0))
+        return context
+
 
 def addpage(request):
     if request.method == 'POST':
