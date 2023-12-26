@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
@@ -15,56 +15,61 @@ menu = [
     {"title": "Войти", "url_name": "login"},
 ]
 
-def index(request):  #HttpRequest
-    posts = Athlete.published.all().select_related('cat')
+# def index(request):  #HttpRequest
+#     posts = Athlete.published.all().select_related('cat')
+#
+#     data = {
+#         'title': 'Главная страница',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': 0,
+#     }
+#     return render(request, 'athletes/index.html', context=data)
 
-    data = {
+
+class AthleteHome(ListView):
+    #model = Athlete
+    template_name = 'athletes/index.html'
+    context_object_name = 'posts'
+    extra_context = data = {
         'title': 'Главная страница',
         'menu': menu,
-        'posts': posts,
         'cat_selected': 0,
     }
-    return render(request, 'athletes/index.html', context=data)
+
+    def get_queryset(self):
+        return Athlete.published.all().select_related('cat')
 
 
-class AthleteHome(TemplateView):
-    template_name = 'athletes/index.html'
-    # extra_context = data = {
-    #     'title': 'Главная страница',
-    #     'menu': menu,
-    #     'posts': Athlete.published.all().select_related('cat'),
-    #     'cat_selected': 0,
-    # }
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Главная страница"
-        context['menu'] = menu
-        context['posts'] = Athlete.published.all().select_related('cat')
-        context['cat_selected'] = int(self.request.GET.get('cat_id', 0))
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = "Главная страница"
+    #     context['menu'] = menu
+    #     context['posts'] = Athlete.published.all().select_related('cat')
+    #     context['cat_selected'] = int(self.request.GET.get('cat_id', 0))
+    #     return context
 
 
-def addpage(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            # try:
-            #     Athlete.objects.create(**form.cleaned_data)
-            #     return redirect('home')
-            # except:
-            #     form.add_error(None, "Ошибка добавления поста")
-            form.save() # доступно при использовании формы связанной с моделью
-            return redirect('home')
-    else:
-        form = AddPostForm()
-
-    data = {'menu': menu,
-            'title': 'Добавление статьи',
-            'form': form
-
-    }
-    return render(request, 'athletes/addpage.html', context=data)
+# def addpage(request):
+#     if request.method == 'POST':
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # try:
+#             #     Athlete.objects.create(**form.cleaned_data)
+#             #     return redirect('home')
+#             # except:
+#             #     form.add_error(None, "Ошибка добавления поста")
+#             form.save() # доступно при использовании формы связанной с моделью
+#             return redirect('home')
+#     else:
+#         form = AddPostForm()
+#
+#     data = {'menu': menu,
+#             'title': 'Добавление статьи',
+#             'form': form
+#
+#     }
+#     return render(request, 'athletes/addpage.html', context=data)
 
 
 class AddPage(View):
