@@ -147,6 +147,22 @@ def show_category(request, cat_slug):
     return render(request, 'athletes/index.html', context=data)
 
 
+class AthleteCategory(ListView):
+    template_name = 'athletes/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Athlete.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = context['posts'][0].cat
+        context['title'] = 'Категория - ' + cat.name
+        context['menu'] = menu
+        context['cat_selected'] = cat.pk
+        return context
+
 def show_tag_postlist(request, tag_slug):
     tag = get_object_or_404(TagPost, slug=tag_slug)
     posts = tag.tags.filter(is_published=Athlete.Status.PUBLISHED)
@@ -158,6 +174,23 @@ def show_tag_postlist(request, tag_slug):
         'cat_selected': None,
     }
     return render(request, 'athletes/index.html', context=data)
+
+class TagPostList(ListView):
+    template_name = 'athletes/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Athlete.published.filter(tags__slug=self.kwargs['tag_slug']).select_related('cat')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
+        context['title'] = 'Тэг - ' + tag.tag
+        context['menu'] = menu
+        context['cat_selected'] = None
+        return context
+
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("<h1>Страница не найдена</h1>")
