@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
@@ -123,18 +123,34 @@ def about(request):
     return render(request, "athletes/about.html", {'title': 'О сайте', 'menu': menu,
                                                    'form': form})
 
-def show_post(request, post_slug):
+# def show_post(request, post_slug):
+#
+#     post = get_object_or_404(Athlete, slug=post_slug)
+#
+#     data = {
+#         'title': post.title,
+#         'menu': menu,
+#         'post': post,
+#         'cat_selected': 1,
+#     }
+#     return render(request, 'athletes/post.html', data)
 
-    post = get_object_or_404(Athlete, slug=post_slug)
 
-    data = {
-        'title': post.title,
-        'menu': menu,
-        'post': post,
-        'cat_selected': 1,
-    }
-    return render(request, 'athletes/post.html', data)
+class ShowPost(DetailView):
+    #model = Athlete
+    template_name = 'athletes/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['post'].title
+        context['menu'] = menu
+        context['cat_selected'] = context['post'].cat.pk
+        return context
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Athlete.published, slug=self.kwargs[self.slug_url_kwarg])
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
     posts = Athlete.published.filter(cat_id=category.pk).select_related('cat')
