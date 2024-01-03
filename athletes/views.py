@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView
 
 from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
@@ -72,20 +72,27 @@ class AthleteHome(ListView):
 #     return render(request, 'athletes/addpage.html', context=data)
 
 
-class AddPage(FormView):
+class AddPage(CreateView):
     form_class = AddPostForm
+    #model = Athlete
+    #fields = '__all__'
     template_name = "athletes/addpage.html"
-    success_url = reverse_lazy('home')
+    #success_url = reverse_lazy('home')
     extra_context = {
         'menu': menu,
         'title': 'Добавление статьи',
     }
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+class UpdatePage(UpdateView):
+    model = Athlete
+    fields = ['title', 'content', 'photo', 'is_published', 'cat']
+    template_name = "athletes/addpage.html"
+    #success_url = reverse_lazy('home')
+    extra_context = {
+        'menu': menu,
+        'title': 'Редактирование статьи',
+    }
 
-    
 
 # class AddPage(View):
 #     def get(self, request):
