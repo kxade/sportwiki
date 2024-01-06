@@ -8,12 +8,9 @@ from .forms import AddPostForm, UploadFileForm
 from .models import Athlete, Category, TagPost, UploadFiles
 from uuid import uuid4
 
-menu = [
-    {"title": "О сайте", "url_name": "about"},
-    {"title": "Добавить статью", "url_name": "add_page"},
-    {"title": "Обратная связь", "url_name": "contact"},
-    {"title": "Войти", "url_name": "login"},
-]
+from .utils import DataMixin
+
+menu = {}
 
 # def index(request):  #HttpRequest
 #     posts = Athlete.published.all().select_related('cat')
@@ -27,15 +24,11 @@ menu = [
 #     return render(request, 'athletes/index.html', context=data)
 
 
-class AthleteHome(ListView):
-    #model = Athlete
+class AthleteHome(DataMixin, ListView):
     template_name = 'athletes/index.html'
     context_object_name = 'posts'
-    extra_context = data = {
-        'title': 'Главная страница',
-        'menu': menu,
-        'cat_selected': 0,
-    }
+    title_page = 'Главная страница'
+    cat_selected = 0
 
     def get_queryset(self):
         return Athlete.published.all().select_related('cat')
@@ -158,7 +151,7 @@ def about(request):
 #     return render(request, 'athletes/post.html', data)
 
 
-class ShowPost(DetailView):
+class ShowPost(DataMixin, DetailView):
     #model = Athlete
     template_name = 'athletes/post.html'
     slug_url_kwarg = 'post_slug'
@@ -166,10 +159,7 @@ class ShowPost(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = context['post'].title
-        context['menu'] = menu
-        context['cat_selected'] = context['post'].cat.pk
-        return context
+        return self.get_mixin_context(context, title=context['post'].title, cat_selected=context['post'].cat.pk)
 
     def get_object(self, queryset=None):
         return get_object_or_404(Athlete.published, slug=self.kwargs[self.slug_url_kwarg])
